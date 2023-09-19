@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -22,13 +24,13 @@
 
   <meta name="description" content="好多好多日记噢… 可能屋主最近真的有很多事情要记录吧… 先说不开心的？这样后面才会越写越开心😂 +++ 又是连着好几天没有睡好午觉，要么是楼道间的大朋友在蹦蹦跳跳，要么是隔壁床因质量问题总是咯吱咯吱… 好像也没什么可以生气的地方，但是没睡好对一个人的精神状态确实蛮折磨的… 今天下午窝着一肚子气去上课，还好课挺对味的… 还有一些个人信息被说出去，还有朋友没有说一些事… 有种被冒犯和被遗忘的感觉哈哈">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Campus-travel">
+<meta property="og:title" content="环校之旅">
 <meta property="og:url" content="http://example.com/2023/09/18/Campus-travel/index.html">
 <meta property="og:site_name" content="云天上摸鱼怪的小屋">
 <meta property="og:description" content="好多好多日记噢… 可能屋主最近真的有很多事情要记录吧… 先说不开心的？这样后面才会越写越开心😂 +++ 又是连着好几天没有睡好午觉，要么是楼道间的大朋友在蹦蹦跳跳，要么是隔壁床因质量问题总是咯吱咯吱… 好像也没什么可以生气的地方，但是没睡好对一个人的精神状态确实蛮折磨的… 今天下午窝着一肚子气去上课，还好课挺对味的… 还有一些个人信息被说出去，还有朋友没有说一些事… 有种被冒犯和被遗忘的感觉哈哈">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-18T15:16:01.000Z">
-<meta property="article:modified_time" content="2023-09-19T04:37:18.859Z">
+<meta property="article:modified_time" content="2023-09-19T04:41:41.078Z">
 <meta property="article:author" content="云天">
 <meta property="article:tag" content="日记">
 <meta name="twitter:card" content="summary">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>Campus-travel | 云天上摸鱼怪的小屋</title>
+  <title>环校之旅 | 云天上摸鱼怪的小屋</title>
   
 
 
@@ -164,7 +166,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Campus-travel
+          环校之旅
         </h1>
 
         <div class="post-meta">
@@ -181,7 +183,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-19 12:37:18" itemprop="dateModified" datetime="2023-09-19T12:37:18+08:00">2023-09-19</time>
+                <time title="修改时间：2023-09-19 12:41:41" itemprop="dateModified" datetime="2023-09-19T12:41:41+08:00">2023-09-19</time>
               </span>
 
           
@@ -211,6 +213,7 @@
 <p>ps：本来还在想要怎么把学弟先订好的晚餐请了… 学弟先发制人来了句，很讨厌一些理工专业同学什么都要AA，屋主… 好吧，下次做东再请回去，这个人情，欠的很舒服！</p>
 <p>+++</p>
 <p>屋主有时候真的好喜欢呆在一个只有自己&#x2F;完全信任的人的空间里噢，在学校里发现琴房是个好地方，希望难得的宁静不会被打破吧qwq…</p>
+<p>ps：侧栏将不定期更新符合心情的歌… （在网上挑了个最简单的做哈哈哈哈哈）</p>
 
     </div>
 
@@ -361,6 +364,7 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 
@@ -374,6 +378,65 @@
 
 <script src="/js/next-boot.js"></script>
 
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -393,9 +456,11 @@
 
 
 
+    <div id="pjax">
   
 
   
 
+    </div>
 </body>
 </html>
